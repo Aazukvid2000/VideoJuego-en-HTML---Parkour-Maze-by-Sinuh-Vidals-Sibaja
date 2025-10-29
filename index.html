@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkour Maze - Juego de Laberinto</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>Parkour Maze</h1>
+            <div class="stats">
+                <span>Nivel: <span id="level-display">1</span></span>
+                <span>Tiempo: <span id="timer">0:00</span></span>
+                <span>Puntos: <span id="score">0</span></span>
+                <span>Muertes: <span id="deaths">0</span></span>
+            </div>
+        </header>
+
+        <div class="game-content">
+            <div class="game-screen">
+                <canvas id="gameCanvas"></canvas>
+                
+                <!-- Pantalla de nivel completado -->
+                <div id="level-complete" class="overlay-screen">
+                    <div class="menu-content">
+                        <h2>¡Nivel Completado!</h2>
+                        <p>Tiempo: <span id="complete-time"></span></p>
+                        <p>Puntos: <span id="complete-score"></span></p>
+                        <p>Muertes: <span id="complete-deaths"></span></p>
+                        <button id="next-level-btn" class="btn-primary">Siguiente Nivel</button>
+                    </div>
+                </div>
+
+                <!-- Pantalla de juego completado con username -->
+                <div id="game-complete" class="overlay-screen">
+                    <div class="menu-content">
+                        <h2>🎉 ¡Felicidades! 🎉</h2>
+                        <h3>Has completado todos los niveles</h3>
+                        <p style="font-size: 1.5em; margin: 20px 0;">Score Final: <span id="final-score" style="color: #FFD700;">0</span></p>
+                        <p>Muertes: <span id="final-deaths">0</span></p>
+                        
+                        <div class="username-input">
+                            <label for="username-input">Ingresa tu nombre para el leaderboard:</label>
+                            <input type="text" id="username-input" placeholder="Tu nombre" maxlength="20" autocomplete="off">
+                            <button id="submit-score-btn" class="btn-primary">Guardar Score</button>
+                            <button id="play-again-btn" class="btn-secondary small">Jugar de Nuevo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="leaderboard">
+                <h2>🏆 Top 5 Puntajes 🏆</h2>
+                <div id="leaderboard-list" class="leaderboard-list">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+                <div class="audio-controls">
+                    <button id="music-toggle" class="btn-secondary small">🔇 Música: OFF</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>⬅️ ➡️ Mover | ESPACIO o ⬆️ Saltar</p>
+        </footer>
+    </div>
+
+    <script src="js/ParticleSystem.js?v=2.1"></script>
+    <script src="js/SpecialEffects.js?v=2.1"></script>
+    <script src="js/LevelManager.js?v=2.1"></script>
+    <script src="js/Game.js?v=2.1"></script>
+    <script src="js/main.js?v=2.1"></script>
+
+    <script>
+        // Script para actualizar el score final en la pantalla de game complete
+        const observer = new MutationObserver(() => {
+            const gameCompleteScreen = document.getElementById('game-complete');
+            if (gameCompleteScreen.classList.contains('visible')) {
+                document.getElementById('final-score').textContent = game.score;
+                document.getElementById('final-deaths').textContent = game.deaths;
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameCompleteScreen = document.getElementById('game-complete');
+            observer.observe(gameCompleteScreen, { attributes: true, attributeFilter: ['class'] });
+        });
+    </script>
+</body>
+</html>
